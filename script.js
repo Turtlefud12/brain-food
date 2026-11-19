@@ -9,39 +9,30 @@ let selectedAnswer = "";
 const cardText =
 document.getElementById("cardText");
 async function loadDeck(deckName) {
-    try {
-        const response =
-        await fetch(
-            `decks/${deckName}.csv`
-        );
-        const csv =
+    const response =
+        await fetch(`decks/${deckName}.csv`);
+    const csv =
         await response.text();
-        flashcards = [];
-        const rows =
-        csv.trim().split('\n');
-        rows.forEach(row => {
-            const parts =
-            row.split(',');
-            if(parts.length >= 2){
-                flashcards.push({
-                    question:
-                    parts[0].trim(),
-                    answer:
-                    parts[1].trim()
-                });
-            }
+    flashcards = [];
+    const rows =
+        csv.trim().split("\n");
+    rows.forEach(row => {
+        const parts =
+            row.split(",");
+        flashcards.push({
+            question:
+                parts[0].trim(),
+            answer:
+                parts[1].trim()
         });
-        console.log(
-          flashcards
-        );
-        currentIndex = 0;
-        displayCard();
-    }
-    catch(error){
-        console.error(
-          error
-        );
-    }
+    });
+    currentIndex = 0;
+    showingFront = true;
+    displayCard();
+    document
+        .getElementById("deckName")
+        .textContent =
+        deckName;
 }
 function displayCard() {
     if (flashcards.length === 0)
@@ -156,30 +147,72 @@ function showQuestion() {
         .innerHTML = html;
 }
 function selectAnswer(answer) {
-    selectedAnswer =
-        answer;
+    selectedAnswer = answer;
+    const buttons =
+    document.querySelectorAll(
+        ".answerButton"
+    );
+    buttons.forEach(button => {
+        button.classList.remove(
+            "selectedAnswer"
+        );
+        if (
+            button.textContent.trim()
+            === answer
+        ) {
+            button.classList.add(
+                "selectedAnswer"
+            );
+        }
+    });
 }
 function submitAnswer() {
     let card =
         quizQuestions[currentQuestion];
+    const buttons =
+        document.querySelectorAll(
+            ".answerButton"
+        );
+    buttons.forEach(button => {
+        if (
+            button.textContent.trim()
+            === card.answer
+        ) {
+            button.classList.add(
+                "correctAnswer"
+            );
+        }
+        if (
+            button.textContent.trim()
+            === selectedAnswer &&
+            selectedAnswer !== card.answer
+        ) {
+            button.classList.add(
+                "wrongAnswer"
+            );
+        }
+        button.disabled = true;
+    });
     if (
-        selectedAnswer ===
-        card.answer
+        selectedAnswer === card.answer
     ) {
         score++;
     }
     else {
         missedCards.push(card);
     }
-    currentQuestion++;
-    if (
-        currentQuestion >=
-        quizQuestions.length
-    ) {
-        showResults();
-        return;
-    }
-    showQuestion();
+    setTimeout(() => {
+        currentQuestion++;
+        selectedAnswer = "";
+        if (
+            currentQuestion >=
+            quizQuestions.length
+        ) {
+            showResults();
+            return;
+        }
+        showQuestion();
+    }, 1500);
 }
 function showResults() {
     document

@@ -28,27 +28,28 @@ button {
     border-radius: 5px;
 }
 .answerButton {
-    display: block;
-    width: 400px;
-    max-width: 90%;
-    margin: 10px auto;
-    background: white;
-    color: black;
-    transition: 0.2s;
+    display:block;
+    width:450px;
+    max-width:90%;
+    margin:10px auto;
+    background:white;
+    color:black;
+    transition:all .2s;
+    padding:15px;
 }
 .answerButton:hover {
-    background: #dbeafe;
+    background:#dbeafe;
 }
 .selectedAnswer {
-    background: #2563eb;
-    color: white;
-    border: 3px solid #93c5fd;
+    background:#2563eb;
+    color:white;
+    border:3px solid #93c5fd;
 }
 .correctAnswer {
-    background: #22c55e;
-    color: white;
+    background:#22c55e !important;
+    color:white !important;
 }
 .wrongAnswer {
-    background: #ef4444;
-    color: white;
+    background:#ef4444 !important;
+    color:white !important;
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Brain Food</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>🧠 Brain Food</h1>
+    <h2>Select a Deck</h2>
+    <button onclick="loadDeck('AirAssPhase1')">
+        AirAssPhase1
+    </button>
+     <hr>
+    <h2 id="deckName">
+        No Deck Selected
+    </h2>
+    <div id="card" class="card">
+        <span id="cardText">
+            Select a Deck
+        </span>
+    </div>
+    <br>
+    <button onclick="prevCard()">
+        Previous
+    </button>
+    <button onclick="flipCard()">
+        Flip
+    </button>
+    <button onclick="nextCard()">
+        Next
+    </button>
+    <hr>
+    <button onclick="startQuiz()">
+        Start 50 Question Quiz
+    </button>
+    <div id="quizSection"></div>
+    <div id="results"></div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -117,56 +117,70 @@ function showQuestion() {
         () => Math.random() - 0.5
     );
     let html = `
-    <h2>
-    Question ${currentQuestion + 1}
-    of ${quizQuestions.length}
-    </h2>
+    <div style="
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:15px;
+        flex-wrap:wrap;
+    ">
+        <h2>
+        Question ${currentQuestion + 1}
+        of ${quizQuestions.length}
+        </h2>
+        <button
+        onclick="submitAnswer()">
+        Submit Answer
+        </button>
+    </div>
     <h3>
-    ${card.question}
+        ${card.question}
     </h3>
     `;
-    choices.forEach(choice => {
+    choices.forEach((choice,index) => {
         html += `
         <button
-        class="answerButton"
-        onclick="selectAnswer('${choice}')">
-        ${choice}
+            id="answer-${index}"
+            class="answerButton"
+            onclick="selectAnswer(
+                this,
+                '${choice.replace(/'/g,"\\'")}'
+            )">
+            ${choice}
         </button>
         `;
     });
-    html += `
-    <button
-    onclick="submitAnswer()">
-    Submit Answer
-    </button>
-    `;
     document
         .getElementById(
             "quizSection"
         )
         .innerHTML = html;
 }
-function selectAnswer(answer) {
+function selectAnswer(
+    button,
+    answer
+){
     selectedAnswer = answer;
     const buttons =
-    document.querySelectorAll(
-        ".answerButton"
-    );
-    buttons.forEach(button => {
-        button.classList.remove(
+        document.querySelectorAll(
+            ".answerButton"
+        );
+    buttons.forEach(btn => {
+        btn.classList.remove(
             "selectedAnswer"
         );
-        if (
-            button.textContent.trim()
-            === answer
-        ) {
-            button.classList.add(
-                "selectedAnswer"
-            );
-        }
     });
+    button.classList.add(
+        "selectedAnswer"
+    );
 }
 function submitAnswer() {
+    if(!selectedAnswer){
+        alert(
+            "Please select an answer."
+        );
+        return;
+    }
     let card =
         quizQuestions[currentQuestion];
     const buttons =
@@ -174,40 +188,46 @@ function submitAnswer() {
             ".answerButton"
         );
     buttons.forEach(button => {
-        if (
-            button.textContent.trim()
-            === card.answer
-        ) {
+        const answerText =
+            button.textContent.trim();
+        if(
+            answerText ===
+            card.answer
+        ){
             button.classList.add(
                 "correctAnswer"
             );
         }
-        if (
-            button.textContent.trim()
-            === selectedAnswer &&
-            selectedAnswer !== card.answer
-        ) {
+        if(
+            answerText ===
+            selectedAnswer &&
+            selectedAnswer !==
+            card.answer
+        ){
             button.classList.add(
                 "wrongAnswer"
             );
         }
         button.disabled = true;
     });
-    if (
-        selectedAnswer === card.answer
-    ) {
+    if(
+        selectedAnswer ===
+        card.answer
+    ){
         score++;
     }
-    else {
-        missedCards.push(card);
+    else{
+        missedCards.push(
+            card
+        );
     }
     setTimeout(() => {
         currentQuestion++;
         selectedAnswer = "";
-        if (
+        if(
             currentQuestion >=
             quizQuestions.length
-        ) {
+        ){
             showResults();
             return;
         }
